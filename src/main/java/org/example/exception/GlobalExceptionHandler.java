@@ -40,4 +40,9 @@ public class GlobalExceptionHandler {
         }
         return new ResponseEntity<>(errorResponse, BAD_REQUEST);
     }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException resourceNotFoundException) {
+        return new ResponseEntity<>(resourceNotFoundException.getMessage(), BAD_REQUEST);
+    }
 }
