@@ -2,14 +2,13 @@ package org.example.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.dto.PostPageResponse;
 import org.example.dto.PostRequest;
 import org.example.dto.PostResponse;
 import org.example.service.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,8 +22,13 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PostResponse>> getAllPosts() {
-        return ResponseEntity.ok(postService.getAllPosts());
+    public ResponseEntity<PostPageResponse> getAllPosts(
+            @RequestParam(required = false, defaultValue = "0", name = "pageNo") int pageNo,
+            @RequestParam(required = false, defaultValue = "10", name = "pageSize") int pageSize,
+            @RequestParam(required = false, defaultValue = "id", name = "sortBy") String sortBy,
+            @RequestParam(required = false, defaultValue = "asc", name = "sortDir") String sortDir
+    ) {
+        return ResponseEntity.ok(postService.getAllPosts(pageNo, pageSize, sortBy, sortDir));
     }
 
     @GetMapping("/{postId}")
@@ -38,7 +42,13 @@ public class PostController {
     }
 
     @DeleteMapping("/{postId}")
-    public ResponseEntity<String> deletePostById(@PathVariable("postId") Long id)  {
+    public ResponseEntity<String> deletePostById(@PathVariable("postId") Long id) {
         return ResponseEntity.ok(postService.deletePostById(id));
+    }
+
+    @DeleteMapping("/delete-all-posts")
+    public ResponseEntity<String> deleteAllPosts() {
+        postService.deleteAllPosts();
+        return ResponseEntity.ok("All data in table: [posts] is deleted!!!");
     }
 }
