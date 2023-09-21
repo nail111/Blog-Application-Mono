@@ -2,9 +2,9 @@ package org.example.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.dto.PostPageResponse;
-import org.example.dto.PostRequest;
-import org.example.dto.PostResponse;
+import org.example.dto.post.PostPageResponse;
+import org.example.dto.post.PostRequest;
+import org.example.dto.post.PostResponse;
 import org.example.service.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

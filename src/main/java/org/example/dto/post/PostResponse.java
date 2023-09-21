@@ -1,4 +1,4 @@
-package org.example.dto;
+package org.example.dto.post;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

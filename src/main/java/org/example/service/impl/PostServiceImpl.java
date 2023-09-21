@@ -2,9 +2,9 @@ package org.example.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.dto.PostPageResponse;
-import org.example.dto.PostRequest;
-import org.example.dto.PostResponse;
+import org.example.dto.post.PostPageResponse;
+import org.example.dto.post.PostRequest;
+import org.example.dto.post.PostResponse;
 import org.example.entity.Post;
 import org.example.exception.ResourceNotFoundException;
 import org.example.mapper.PostMapper;

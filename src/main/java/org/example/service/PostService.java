@@ -1,10 +1,8 @@
 package org.example.service;
 
-import org.example.dto.PostPageResponse;
-import org.example.dto.PostRequest;
-import org.example.dto.PostResponse;
-
-import java.util.List;
+import org.example.dto.post.PostPageResponse;
+import org.example.dto.post.PostRequest;
+import org.example.dto.post.PostResponse;
 
 public interface PostService {
     PostResponse createPost(PostRequest postRequest);
