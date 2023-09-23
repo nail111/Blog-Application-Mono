@@ -10,32 +10,32 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
-@Table(name = "posts", uniqueConstraints = @UniqueConstraint(columnNames = {"title"}))
+@Table(name = "comments")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Post {
+public class Comment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "title", unique = true, nullable = false)
-    private String title;
+    @Column(name = "name", unique = false, nullable = false)
+    private String name;
 
-    @Column(name = "description", unique = false, nullable = false)
-    private String description;
+    @Column(name = "email", unique = false, nullable = false)
+    private String email;
 
-    @Column(name = "content", unique = false, nullable = false)
-    private String content;
+    @Column(name = "body", unique = false, nullable = false)
+    private String body;
 
-    @OneToMany(mappedBy = "post", orphanRemoval = true, cascade = CascadeType.ALL)
-    private Set<Comment> comments = new HashSet<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id", nullable = false)
+    private Post post;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false, nullable = false)
