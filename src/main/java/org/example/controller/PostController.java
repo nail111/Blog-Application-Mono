@@ -8,6 +8,7 @@ import org.example.dto.post.PostResponse;
 import org.example.service.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,6 +18,7 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PostResponse> createPost(@RequestBody @Valid PostRequest postRequest) {
         return new ResponseEntity<>(postService.createPost(postRequest), HttpStatus.CREATED);
     }
@@ -37,6 +39,7 @@ public class PostController {
     }
 
     @PutMapping("/{postId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PostResponse> updatePostById(@PathVariable("postId") Long id, @RequestBody @Valid PostRequest postRequest) {
         return ResponseEntity.ok(postService.updatePostById(id, postRequest));
     }
@@ -47,6 +50,7 @@ public class PostController {
     }
 
     @DeleteMapping("/delete-all-posts")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteAllPosts() {
         postService.deleteAllPosts();
         return ResponseEntity.ok("All data in table: [posts] is deleted!!!");
