@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @JsonPropertyOrder({
+        "id",
         "name",
         "email",
         "body",
@@ -24,6 +25,10 @@ import java.time.LocalDateTime;
         "updatedAt"
 })
 public class CommentResponse implements Serializable {
+
+    @JsonProperty("id")
+    @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.NON_DEFAULT)
+    private Long id;
 
     @JsonProperty("name")
     @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.NON_DEFAULT)

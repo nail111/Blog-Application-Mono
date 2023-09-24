@@ -2,13 +2,15 @@ package org.example.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.dto.comment.CommentResponse;
 import org.example.dto.post.PostPageResponse;
 import org.example.dto.post.PostRequest;
 import org.example.dto.post.PostResponse;
 import org.example.entity.Post;
 import org.example.exception.ResourceNotFoundException;
-import org.example.mapper.PostMapper;
+import org.example.repository.CommentRepository;
 import org.example.repository.PostRepository;
+import org.example.service.CommentService;
 import org.example.service.PostService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -17,33 +19,35 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
+    private final CommentService commentService;
+    private final CommentRepository commentRepository;
 
     @Override
     public PostResponse createPost(PostRequest postRequest) {
         log.info("Post sent from the client: {}", postRequest);
 
         log.info("Trying to map PostRequest: {} to Post", postRequest);
-        Post post = PostMapper.MAPPER.toEntity(postRequest);
+        Post post = new Post();
+        BeanUtils.copyProperties(postRequest, post);
         log.info("Mapped successfully: {}", post);
-
-        log.info("Setting creation date and update date");
-        post.setCreatedAt(LocalDateTime.now());
-        post.setUpdatedAt(LocalDateTime.now());
-        log.info("Setted successfully: {}", post);
 
         log.info("Trying to save new post: {}", post);
         Post savedPost = postRepository.save(post);
         log.info("Post: {} is saved", savedPost);
 
         log.info("Trying to map Post: {} to PostResponse", savedPost);
-        PostResponse postResponse = PostMapper.MAPPER.toDto(savedPost);
+        PostResponse postResponse = new PostResponse();
+        BeanUtils.copyProperties(post, postResponse);
         log.info("Mapped successfully: {}", postResponse);
 
         return postResponse;
@@ -57,7 +61,20 @@ public class PostServiceImpl implements PostService {
         Page<Post> allPosts = postRepository.findAll(pageable);
 
         PostPageResponse postPageResponse = new PostPageResponse();
-        postPageResponse.setContent(allPosts.getContent().stream().map(PostMapper.MAPPER::toDto).toList());
+        List<Post> posts = allPosts.getContent();
+        List<PostResponse> postResponseList = new ArrayList<>();
+
+        posts.forEach(post -> {
+            PostResponse postResponse = new PostResponse();
+            List<CommentResponse> allCommentsByPostId = commentService.getAllCommentsByPostId(post.getId());
+            Set<CommentResponse> commentResponseSet = new HashSet<>(allCommentsByPostId);
+
+            BeanUtils.copyProperties(post, postResponse, "comments");
+            postResponse.setComments(commentResponseSet);
+            postResponseList.add(postResponse);
+        });
+
+        postPageResponse.setContent(postResponseList);
         postPageResponse.setPageNo(allPosts.getNumber());
         postPageResponse.setPageSize(allPosts.getSize());
         postPageResponse.setTotalElements(allPosts.getTotalElements());
@@ -70,26 +87,30 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostResponse getPostById(Long id) {
         Post post = getPost(id);
-        return PostMapper.MAPPER.toDto(post);
+        PostResponse postResponse = new PostResponse();
+        BeanUtils.copyProperties(post, postResponse, "comments");
+        List<CommentResponse> allCommentsByPostId = commentService.getAllCommentsByPostId(post.getId());
+        Set<CommentResponse> commentResponseSet = new HashSet<>(allCommentsByPostId);
+        postResponse.setComments(commentResponseSet);
+        return postResponse;
     }
 
     @Override
     public PostResponse updatePostById(Long id, PostRequest postRequest) {
         Post post = getPost(id);
+
         log.info("copying properties...");
         BeanUtils.copyProperties(postRequest, post);
         log.info("done: {}", post);
+
         log.info("saving updated post");
         Post savedPost = postRepository.save(post);
         log.info("updated post saved: {}", savedPost);
-        return PostMapper.MAPPER.toDto(savedPost);
-    }
 
-    private Post getPost(Long id) {
-        log.info("getting a post with id: {}", id);
-        Post post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("post", "id", String.valueOf(id)));
-        log.info("post with id: {} is found - {}", id, post);
-        return post;
+        PostResponse postResponse = new PostResponse();
+        BeanUtils.copyProperties(savedPost, postResponse);
+
+        return postResponse;
     }
 
     @Override
@@ -103,6 +124,14 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void deleteAllPosts() {
+        commentRepository.deleteAll();
         postRepository.deleteAll();
+    }
+
+    private Post getPost(Long id) {
+        log.info("getting a post with id: {}", id);
+        Post post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("post", "id", String.valueOf(id)));
+        log.info("post with id: {} is found - {}", id, post);
+        return post;
     }
 }
