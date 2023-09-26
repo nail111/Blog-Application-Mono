@@ -18,7 +18,7 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<PostResponse> createPost(@RequestBody @Valid PostRequest postRequest) {
         return new ResponseEntity<>(postService.createPost(postRequest), HttpStatus.CREATED);
     }
@@ -39,7 +39,7 @@ public class PostController {
     }
 
     @PutMapping("/{postId}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<PostResponse> updatePostById(@PathVariable("postId") Long id, @RequestBody @Valid PostRequest postRequest) {
         return ResponseEntity.ok(postService.updatePostById(id, postRequest));
     }
@@ -50,7 +50,7 @@ public class PostController {
     }
 
     @DeleteMapping("/delete-all-posts")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> deleteAllPosts() {
         postService.deleteAllPosts();
         return ResponseEntity.ok("All data in table: [posts] is deleted!!!");
