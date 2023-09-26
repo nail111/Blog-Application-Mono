@@ -12,5 +12,6 @@ import java.time.LocalDateTime;
 public class CustomErrorResponse {
     private LocalDateTime timestamp;
     private String message;
+    private int code;
     private String url;
 }

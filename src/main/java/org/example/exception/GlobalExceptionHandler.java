@@ -5,6 +5,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -59,9 +60,40 @@ public class GlobalExceptionHandler {
         CustomErrorResponse errorResponse = new CustomErrorResponse(
                 LocalDateTime.now(),
                 "Access Denied",
+                HttpStatus.FORBIDDEN.value(),
                 webRequest.getDescription(false)
         );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<CustomErrorResponse> handleAuthenticationException(
+            AuthenticationException authenticationException,
+            WebRequest webRequest
+    ) {
+        CustomErrorResponse errorResponse = new CustomErrorResponse(
+                LocalDateTime.now(),
+                "username (or email) or password incorrect",
+                BAD_REQUEST.value(),
+                webRequest.getDescription(false)
+        );
+
+        return new ResponseEntity<>(errorResponse, BAD_REQUEST);
+    }
+
+    @ExceptionHandler(RegistrationException.class)
+    public ResponseEntity<CustomErrorResponse> handleRegistrationException(
+            RegistrationException registrationException,
+            WebRequest webRequest
+    ) {
+        CustomErrorResponse errorResponse = new CustomErrorResponse(
+                LocalDateTime.now(),
+                registrationException.getMessage(),
+                BAD_REQUEST.value(),
+                webRequest.getDescription(false)
+        );
+
+        return new ResponseEntity<>(errorResponse, BAD_REQUEST);
     }
 }
