@@ -5,8 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ad170a93-ff39-4e4f-abcb-2690e6ee5341" name="Changes" comment="add">
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/PostController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,8 +16,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
-        <option value="Interface" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -63,7 +62,7 @@
       <recent name="org.example.service" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.BlogApplication">
+  <component name="RunManager" selected="Spring Boot.BlogApplication">
     <configuration name="BlogApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.BlogApplication" />
       <module name="blog-application" />
@@ -92,6 +91,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Spring Boot.BlogApplication" />
         <item itemvalue="Application.BlogApplication" />
       </list>
     </recent_temporary>
@@ -108,6 +108,7 @@
       <workItem from="1695015416150" duration="691000" />
       <workItem from="1695017697743" duration="7898000" />
       <workItem from="1695283412100" duration="8918000" />
+      <workItem from="1695639192709" duration="3533000" />
     </task>
     <task id="LOCAL-00001" summary="add handling ResourceNotFoundException">
       <created>1695018503396</created>
