@@ -96,4 +96,16 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(errorResponse, BAD_REQUEST);
     }
+
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<CustomErrorResponse> handleJwtException(JwtException jwtException, WebRequest webRequest) {
+        CustomErrorResponse errorResponse = new CustomErrorResponse(
+                LocalDateTime.now(),
+                jwtException.getMessage(),
+                BAD_REQUEST.value(),
+                webRequest.getDescription(false)
+        );
+
+        return new ResponseEntity<>(errorResponse, BAD_REQUEST);
+    }
 }
