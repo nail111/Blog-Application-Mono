@@ -1,6 +1,7 @@
 package org.example.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.example.dto.auth.JWTAuthResponse;
 import org.example.dto.auth.LoginRequest;
 import org.example.dto.auth.RegistrationRequest;
 import org.example.entity.Role;
@@ -8,6 +9,7 @@ import org.example.entity.User;
 import org.example.exception.RegistrationException;
 import org.example.repository.RoleRepository;
 import org.example.repository.UserRepository;
+import org.example.security.JwtTokenProvider;
 import org.example.service.AuthService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,9 +29,10 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
-    public String login(LoginRequest loginRequest) {
+    public JWTAuthResponse login(LoginRequest loginRequest) {
 
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(
@@ -37,7 +40,12 @@ public class AuthServiceImpl implements AuthService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return "User logged-in successfully!";
+        String token = jwtTokenProvider.generateToken(authentication);
+
+        JWTAuthResponse jwtAuthResponse = new JWTAuthResponse();
+        jwtAuthResponse.setAccessToken(token);
+
+        return jwtAuthResponse;
     }
 
     @Override

@@ -2,6 +2,7 @@ package org.example.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.dto.auth.JWTAuthResponse;
 import org.example.dto.auth.LoginRequest;
 import org.example.dto.auth.RegistrationRequest;
 import org.example.service.AuthService;
@@ -19,12 +20,12 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping(value = {"/login", "/signin"})
-    public ResponseEntity<String> login(@RequestBody @Valid LoginRequest loginRequest) {
+    public ResponseEntity<JWTAuthResponse> login(@RequestBody @Valid LoginRequest loginRequest) {
         return ResponseEntity.ok(authService.login(loginRequest));
     }
 
     @PostMapping(value = {"/registration", "/signup"})
-    public ResponseEntity<String> registartion(@RequestBody @Valid RegistrationRequest registrationRequest) {
+    public ResponseEntity<String> registration(@RequestBody @Valid RegistrationRequest registrationRequest) {
         return new ResponseEntity<>(authService.registration(registrationRequest), HttpStatus.CREATED);
     }
 }

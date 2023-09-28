@@ -1,9 +1,9 @@
 package org.example.security;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.example.exception.JwtException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -19,6 +19,7 @@ public class JwtTokenProvider {
 
     @Value("${app-jwt-expiration-milliseconds}")
     private Long jwtExpirationDate;
+
 
     // generate JWT token
     public String generateToken(Authentication authentication) {
@@ -56,21 +57,11 @@ public class JwtTokenProvider {
 
     // validate Jwt token
     public boolean validateToken(String token) {
-        try {
-            Jwts.parserBuilder()
-                    .setSigningKey(key())
-                    .build()
-                    .parse(token);
+        Jwts.parserBuilder()
+                .setSigningKey(key())
+                .build()
+                .parse(token);
 
-            return true;
-        } catch (MalformedJwtException exception) {
-            throw new JwtException("Invalid JWT token");
-        } catch (ExpiredJwtException exception) {
-            throw new JwtException("Expired JWT token");
-        } catch (UnsupportedJwtException exception) {
-            throw new JwtException("Unsupported JWT token");
-        } catch (IllegalArgumentException exception) {
-            throw new JwtException("JWT claims string is empty");
-        }
+        return true;
     }
 }

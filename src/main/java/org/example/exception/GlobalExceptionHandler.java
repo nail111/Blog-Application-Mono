@@ -1,5 +1,8 @@
 package org.example.exception;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import org.example.dto.error.CustomErrorResponse;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -18,12 +21,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException methodArgumentNotValidException) {
+    public ResponseEntity<?> handle(MethodArgumentNotValidException methodArgumentNotValidException) {
         List<String> error = methodArgumentNotValidException
                 .getFieldErrors()
                 .stream()
@@ -34,7 +38,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<?> handleDataIntegrityViolationException(DataIntegrityViolationException dataIntegrityViolationException) {
+    public ResponseEntity<?> handle(DataIntegrityViolationException dataIntegrityViolationException) {
         String errorMessage = dataIntegrityViolationException.getMessage();
         String errorResponse = null;
         if (errorMessage.contains("Duplicate entry")) {
@@ -48,15 +52,12 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException resourceNotFoundException) {
+    public ResponseEntity<?> handle(ResourceNotFoundException resourceNotFoundException) {
         return new ResponseEntity<>(resourceNotFoundException.getMessage(), BAD_REQUEST);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<CustomErrorResponse> handleAccessDeniedException(
-            AccessDeniedException accessDeniedException,
-            WebRequest webRequest
-    ) {
+    public ResponseEntity<CustomErrorResponse> handle(AccessDeniedException accessDeniedException, WebRequest webRequest) {
         CustomErrorResponse errorResponse = new CustomErrorResponse(
                 LocalDateTime.now(),
                 "Access Denied",
@@ -68,10 +69,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<CustomErrorResponse> handleAuthenticationException(
-            AuthenticationException authenticationException,
-            WebRequest webRequest
-    ) {
+    public ResponseEntity<CustomErrorResponse> handle(AuthenticationException authenticationException, WebRequest webRequest) {
         CustomErrorResponse errorResponse = new CustomErrorResponse(
                 LocalDateTime.now(),
                 "username (or email) or password incorrect",
@@ -83,10 +81,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(RegistrationException.class)
-    public ResponseEntity<CustomErrorResponse> handleRegistrationException(
-            RegistrationException registrationException,
-            WebRequest webRequest
-    ) {
+    public ResponseEntity<CustomErrorResponse> handle(RegistrationException registrationException, WebRequest webRequest) {
         CustomErrorResponse errorResponse = new CustomErrorResponse(
                 LocalDateTime.now(),
                 registrationException.getMessage(),
@@ -97,15 +92,63 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, BAD_REQUEST);
     }
 
-    @ExceptionHandler(JwtException.class)
-    public ResponseEntity<CustomErrorResponse> handleJwtException(JwtException jwtException, WebRequest webRequest) {
+    @ExceptionHandler(MalformedJwtException.class)
+    public ResponseEntity<CustomErrorResponse> handle(MalformedJwtException malformedJwtException, WebRequest webRequest) {
         CustomErrorResponse errorResponse = new CustomErrorResponse(
                 LocalDateTime.now(),
-                jwtException.getMessage(),
+                "INVALID TOKEN",
                 BAD_REQUEST.value(),
                 webRequest.getDescription(false)
         );
 
         return new ResponseEntity<>(errorResponse, BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<CustomErrorResponse> handle(ExpiredJwtException expiredJwtException, WebRequest webRequest) {
+        CustomErrorResponse errorResponse = new CustomErrorResponse(
+                LocalDateTime.now(),
+                "TOKEN EXPIRED",
+                BAD_REQUEST.value(),
+                webRequest.getDescription(false)
+        );
+
+        return new ResponseEntity<>(errorResponse, BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UnsupportedJwtException.class)
+    public ResponseEntity<CustomErrorResponse> handle(UnsupportedJwtException unsupportedJwtException, WebRequest webRequest) {
+        CustomErrorResponse errorResponse = new CustomErrorResponse(
+                LocalDateTime.now(),
+                "UNSUPPORTED TOKEN",
+                BAD_REQUEST.value(),
+                webRequest.getDescription(false)
+        );
+
+        return new ResponseEntity<>(errorResponse, BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<CustomErrorResponse> handle(IllegalArgumentException illegalArgumentException, WebRequest webRequest) {
+        CustomErrorResponse errorResponse = new CustomErrorResponse(
+                LocalDateTime.now(),
+                illegalArgumentException.getMessage(),
+                BAD_REQUEST.value(),
+                webRequest.getDescription(false)
+        );
+
+        return new ResponseEntity<>(errorResponse, BAD_REQUEST);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<CustomErrorResponse> handle(Exception exception, WebRequest webRequest) {
+        CustomErrorResponse errorResponse = new CustomErrorResponse(
+                LocalDateTime.now(),
+                exception.getMessage(),
+                INTERNAL_SERVER_ERROR.value(),
+                webRequest.getDescription(false)
+        );
+
+        return new ResponseEntity<>(errorResponse, INTERNAL_SERVER_ERROR);
     }
 }
