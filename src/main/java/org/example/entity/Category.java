@@ -1,41 +1,29 @@
 package org.example.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
-@Table(name = "posts", uniqueConstraints = @UniqueConstraint(columnNames = {"title"}))
+@Table(name = "categories", uniqueConstraints = @UniqueConstraint(columnNames = {"name"}))
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class Post {
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "title", unique = true, nullable = false)
-    private String title;
+    @Column(name = "name", unique = true, nullable = false)
+    private String name;
 
     @Column(name = "description", unique = false, nullable = false)
     private String description;
-
-    @Column(name = "content", unique = false, nullable = false)
-    private String content;
-
-    @OneToMany(mappedBy = "post", orphanRemoval = true, cascade = CascadeType.ALL)
-    private Set<Comment> comments = new HashSet<>();
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false, nullable = false)
@@ -44,8 +32,4 @@ public class Post {
     @UpdateTimestamp
     @Column(name = "updated_at", updatable = true, nullable = false)
     private LocalDateTime updatedAt;
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
 }

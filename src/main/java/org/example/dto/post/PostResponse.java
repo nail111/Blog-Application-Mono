@@ -22,6 +22,7 @@ import java.util.Set;
         "title",
         "description",
         "content",
+        "categoryId",
         "comments",
         "createdAt",
         "updatedAt"
@@ -42,6 +43,10 @@ public class PostResponse {
     @JsonProperty("content")
     @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.NON_DEFAULT)
     private String content;
+
+    @JsonProperty("category_id")
+    @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.NON_DEFAULT)
+    private Long categoryId;
 
     @JsonProperty("comments")
     @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.NON_DEFAULT)

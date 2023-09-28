@@ -6,8 +6,11 @@ import org.example.dto.comment.CommentResponse;
 import org.example.dto.post.PostPageResponse;
 import org.example.dto.post.PostRequest;
 import org.example.dto.post.PostResponse;
+import org.example.entity.Category;
+import org.example.entity.Comment;
 import org.example.entity.Post;
 import org.example.exception.ResourceNotFoundException;
+import org.example.repository.CategoryRepository;
 import org.example.repository.CommentRepository;
 import org.example.repository.PostRepository;
 import org.example.service.CommentService;
@@ -31,6 +34,7 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final CommentService commentService;
     private final CommentRepository commentRepository;
+    private final CategoryRepository categoryRepository;
 
     @Override
     public PostResponse createPost(PostRequest postRequest) {
@@ -40,6 +44,13 @@ public class PostServiceImpl implements PostService {
         Post post = new Post();
         BeanUtils.copyProperties(postRequest, post);
         log.info("Mapped successfully: {}", post);
+
+        Category category = categoryRepository
+                .findById(postRequest.getCategoryId())
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("category", "id", String.valueOf(postRequest.getCategoryId())));
+
+        post.setCategory(category);
 
         log.info("Trying to save new post: {}", post);
         Post savedPost = postRepository.save(post);
@@ -71,6 +82,8 @@ public class PostServiceImpl implements PostService {
 
             BeanUtils.copyProperties(post, postResponse, "comments");
             postResponse.setComments(commentResponseSet);
+
+            postResponse.setCategoryId(post.getCategory().getId());
             postResponseList.add(postResponse);
         });
 
@@ -92,6 +105,7 @@ public class PostServiceImpl implements PostService {
         List<CommentResponse> allCommentsByPostId = commentService.getAllCommentsByPostId(post.getId());
         Set<CommentResponse> commentResponseSet = new HashSet<>(allCommentsByPostId);
         postResponse.setComments(commentResponseSet);
+        postResponse.setCategoryId(post.getCategory().getId());
         return postResponse;
     }
 
@@ -103,6 +117,13 @@ public class PostServiceImpl implements PostService {
         BeanUtils.copyProperties(postRequest, post);
         log.info("done: {}", post);
 
+        Category category = categoryRepository
+                .findById(postRequest.getCategoryId())
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("category", "id", String.valueOf(postRequest.getCategoryId())));
+
+        post.setCategory(category);
+
         log.info("saving updated post");
         Post savedPost = postRepository.save(post);
         log.info("updated post saved: {}", savedPost);
@@ -110,6 +131,16 @@ public class PostServiceImpl implements PostService {
         PostResponse postResponse = new PostResponse();
         BeanUtils.copyProperties(savedPost, postResponse);
 
+        List<Comment> allCommentsByPostId = commentRepository.findAllCommentsByPostId(post.getId());
+        Set<CommentResponse> commentResponseList = new HashSet<>();
+
+        allCommentsByPostId.forEach(comment -> {
+            CommentResponse commentResponse = new CommentResponse();
+            BeanUtils.copyProperties(comment, commentResponse);
+            commentResponseList.add(commentResponse);
+        });
+
+        postResponse.setComments(commentResponseList);
         return postResponse;
     }
 
