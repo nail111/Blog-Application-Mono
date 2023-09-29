@@ -38,12 +38,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostResponse createPost(PostRequest postRequest) {
-        log.info("Post sent from the client: {}", postRequest);
-
-        log.info("Trying to map PostRequest: {} to Post", postRequest);
         Post post = new Post();
         BeanUtils.copyProperties(postRequest, post);
-        log.info("Mapped successfully: {}", post);
 
         Category category = categoryRepository
                 .findById(postRequest.getCategoryId())
@@ -52,15 +48,12 @@ public class PostServiceImpl implements PostService {
 
         post.setCategory(category);
 
-        log.info("Trying to save new post: {}", post);
-        Post savedPost = postRepository.save(post);
-        log.info("Post: {} is saved", savedPost);
+        postRepository.save(post);
 
-        log.info("Trying to map Post: {} to PostResponse", savedPost);
         PostResponse postResponse = new PostResponse();
         BeanUtils.copyProperties(post, postResponse);
-        log.info("Mapped successfully: {}", postResponse);
 
+        postResponse.setCategoryId(post.getCategory().getId());
         return postResponse;
     }
 
@@ -68,7 +61,7 @@ public class PostServiceImpl implements PostService {
     public PostPageResponse getAllPosts(int pageNo, int pageSize, String sortBy, String sortDir) {
         Sort sort = sortDir.equals("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
-        log.info("getting all posts");
+
         Page<Post> allPosts = postRepository.findAll(pageable);
 
         PostPageResponse postPageResponse = new PostPageResponse();
@@ -81,7 +74,9 @@ public class PostServiceImpl implements PostService {
             Set<CommentResponse> commentResponseSet = new HashSet<>(allCommentsByPostId);
 
             BeanUtils.copyProperties(post, postResponse, "comments");
-            postResponse.setComments(commentResponseSet);
+            if (!commentResponseSet.isEmpty()) {
+                postResponse.setComments(commentResponseSet);
+            }
 
             postResponse.setCategoryId(post.getCategory().getId());
             postResponseList.add(postResponse);
@@ -104,7 +99,11 @@ public class PostServiceImpl implements PostService {
         BeanUtils.copyProperties(post, postResponse, "comments");
         List<CommentResponse> allCommentsByPostId = commentService.getAllCommentsByPostId(post.getId());
         Set<CommentResponse> commentResponseSet = new HashSet<>(allCommentsByPostId);
-        postResponse.setComments(commentResponseSet);
+
+        if (!commentResponseSet.isEmpty()) {
+            postResponse.setComments(commentResponseSet);
+        }
+
         postResponse.setCategoryId(post.getCategory().getId());
         return postResponse;
     }
@@ -140,29 +139,29 @@ public class PostServiceImpl implements PostService {
             commentResponseList.add(commentResponse);
         });
 
-        postResponse.setComments(commentResponseList);
+        if (!commentResponseList.isEmpty()) {
+            postResponse.setComments(commentResponseList);
+        }
+
+        postResponse.setCategoryId(category.getId());
+
         return postResponse;
     }
 
     @Override
     public String deletePostById(Long id) {
         Post post = getPost(id);
-        log.info("deleting post: {}", post);
         postRepository.delete(post);
-        log.info("Post: {} is deleted", post);
         return "Post: " + post.getTitle() + " is deleted!!!";
     }
 
     @Override
     public void deleteAllPosts() {
-        commentRepository.deleteAll();
         postRepository.deleteAll();
     }
 
     private Post getPost(Long id) {
-        log.info("getting a post with id: {}", id);
         Post post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("post", "id", String.valueOf(id)));
-        log.info("post with id: {} is found - {}", id, post);
         return post;
     }
 }

@@ -1,5 +1,7 @@
 package org.example.dto.category;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
@@ -8,7 +10,6 @@ import lombok.NoArgsConstructor;
 import org.example.dto.post.PostResponse;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -22,6 +23,7 @@ import java.util.Set;
         "createdAt",
         "updatedAt"
 })
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CategoryResponse {
 
     @JsonProperty("id")
@@ -34,7 +36,8 @@ public class CategoryResponse {
     private String description;
 
     @JsonProperty("posts")
-    Set<PostResponse> posts = new HashSet<>();
+    @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.NON_EMPTY)
+    Set<PostResponse> posts;
 
     @JsonProperty("created_at")
     private LocalDateTime createdAt;

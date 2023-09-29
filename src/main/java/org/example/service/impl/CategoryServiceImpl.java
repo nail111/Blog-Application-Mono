@@ -29,12 +29,9 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryResponse createCategory(CategoryRequest categoryRequest) {
         Category category = new Category();
 
-        log.info("mapping: {} to {}", categoryRequest, category);
         BeanUtils.copyProperties(categoryRequest, category);
-        log.info("mapped: {}", category);
 
         Category savedCategory = categoryRepository.save(category);
-        log.info("category saved: {}", savedCategory);
 
         CategoryResponse categoryResponse = new CategoryResponse();
         BeanUtils.copyProperties(savedCategory, categoryResponse, "posts");
@@ -51,7 +48,6 @@ public class CategoryServiceImpl implements CategoryService {
             }
         });
 
-        categoryResponse.setPosts(postResponseSet);
         return categoryResponse;
-    }
+    } // fixed
 }

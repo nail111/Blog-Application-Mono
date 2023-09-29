@@ -1,17 +1,21 @@
 package org.example.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "categories", uniqueConstraints = @UniqueConstraint(columnNames = {"name"}))
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Category {
@@ -32,4 +36,8 @@ public class Category {
     @UpdateTimestamp
     @Column(name = "updated_at", updatable = true, nullable = false)
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<Post> posts;
 }

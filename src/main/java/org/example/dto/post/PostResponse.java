@@ -49,8 +49,8 @@ public class PostResponse {
     private Long categoryId;
 
     @JsonProperty("comments")
-    @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.NON_DEFAULT)
-    private Set<CommentResponse> comments = new HashSet<>();
+    @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.NON_EMPTY)
+    private Set<CommentResponse> comments;
 
     @JsonProperty("created_at")
     @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.NON_DEFAULT)

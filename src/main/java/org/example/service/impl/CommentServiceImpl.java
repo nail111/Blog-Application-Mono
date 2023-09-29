@@ -27,26 +27,19 @@ public class CommentServiceImpl implements CommentService {
     public CommentResponse createComment(CommentRequest commentRequest, Long postId) {
         Post post = getPostIfExistsById(postId);
 
-        log.info("mapping commentRequest: {}", commentRequest);
         Comment comment = new Comment();
         BeanUtils.copyProperties(commentRequest, comment);
-        log.info("mapped successfully: {}", comment);
 
-        log.info("setting post: {} to comment: {}", post, comment);
         comment.setPost(post);
-        log.info("post is setted to comment: {}", comment);
 
-        log.info("saving comment: {}", comment);
         Comment savedComment = commentRepository.save(comment);
-        log.info("comment: {} is saved", savedComment);
 
-        log.info("mapping comment: {} to commentResponse", savedComment);
         CommentResponse commentResponse = new CommentResponse();
         BeanUtils.copyProperties(savedComment, commentResponse);
         commentResponse.setPostId(post.getId());
 
         return commentResponse;
-    }
+    } // fixed
 
     @Override
     public List<CommentResponse> getAllCommentsByPostId(Long postId) {
@@ -100,9 +93,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private Post getPostIfExistsById(Long postId) {
-        log.info("getting post with id: {}", postId);
         Post post = postRepository.findById(postId).orElseThrow(() -> new ResourceNotFoundException("post", "id", String.valueOf(postId)));
-        log.info("post: {} is found by id: {}", post, postId);
         return post;
     }
 

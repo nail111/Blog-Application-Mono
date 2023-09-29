@@ -2,10 +2,7 @@ package org.example.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -13,7 +10,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "comments")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -33,7 +31,7 @@ public class Comment {
     @Column(name = "body", unique = false, nullable = false)
     private String body;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 

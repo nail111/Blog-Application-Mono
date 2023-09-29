@@ -2,10 +2,7 @@ package org.example.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -15,7 +12,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "posts", uniqueConstraints = @UniqueConstraint(columnNames = {"title"}))
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -45,7 +43,7 @@ public class Post {
     @Column(name = "updated_at", updatable = true, nullable = false)
     private LocalDateTime updatedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 }
