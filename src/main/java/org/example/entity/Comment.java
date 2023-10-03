@@ -31,7 +31,7 @@ public class Comment {
     @Column(name = "body", unique = false, nullable = false)
     private String body;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
@@ -42,4 +42,16 @@ public class Comment {
     @UpdateTimestamp
     @Column(name = "updated_at", updatable = true, nullable = false)
     private LocalDateTime updatedAt;
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", body='" + body + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
 }

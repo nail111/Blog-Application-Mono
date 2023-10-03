@@ -112,9 +112,7 @@ public class PostServiceImpl implements PostService {
     public PostResponse updatePostById(Long id, PostRequest postRequest) {
         Post post = getPost(id);
 
-        log.info("copying properties...");
         BeanUtils.copyProperties(postRequest, post);
-        log.info("done: {}", post);
 
         Category category = categoryRepository
                 .findById(postRequest.getCategoryId())
@@ -123,9 +121,7 @@ public class PostServiceImpl implements PostService {
 
         post.setCategory(category);
 
-        log.info("saving updated post");
         Post savedPost = postRepository.save(post);
-        log.info("updated post saved: {}", savedPost);
 
         PostResponse postResponse = new PostResponse();
         BeanUtils.copyProperties(savedPost, postResponse);
@@ -136,6 +132,7 @@ public class PostServiceImpl implements PostService {
         allCommentsByPostId.forEach(comment -> {
             CommentResponse commentResponse = new CommentResponse();
             BeanUtils.copyProperties(comment, commentResponse);
+            commentResponse.setPostId(post.getId());
             commentResponseList.add(commentResponse);
         });
 

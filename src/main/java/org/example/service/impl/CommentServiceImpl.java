@@ -39,7 +39,7 @@ public class CommentServiceImpl implements CommentService {
         commentResponse.setPostId(post.getId());
 
         return commentResponse;
-    } // fixed
+    }
 
     @Override
     public List<CommentResponse> getAllCommentsByPostId(Long postId) {
@@ -98,11 +98,9 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private Comment getCommentIfExistsById(Long commentId) {
-        log.info("getting comment by comment_id: {}", commentId);
         Comment comment = commentRepository
                 .findById(commentId)
                 .orElseThrow(() -> new ResourceNotFoundException("comment", "id", String.valueOf(commentId)));
-        log.info("comment found: {}", comment);
         return comment;
     }
 }
