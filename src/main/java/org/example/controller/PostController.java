@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.post.PostPageResponse;
@@ -19,6 +20,9 @@ public class PostController {
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @SecurityRequirement(
+            name = "Bearer Authentication"
+    )
     public ResponseEntity<PostResponse> createPost(@RequestBody @Valid PostRequest postRequest) {
         return new ResponseEntity<>(postService.createPost(postRequest), HttpStatus.CREATED);
     }
@@ -40,6 +44,9 @@ public class PostController {
 
     @PutMapping("/{postId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @SecurityRequirement(
+            name = "Bearer Authentication"
+    )
     public ResponseEntity<PostResponse> updatePostById(@PathVariable("postId") Long id, @RequestBody @Valid PostRequest postRequest) {
         return ResponseEntity.ok(postService.updatePostById(id, postRequest));
     }
@@ -51,6 +58,9 @@ public class PostController {
 
     @DeleteMapping("/delete-all-posts")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @SecurityRequirement(
+            name = "Bearer Authentication"
+    )
     public ResponseEntity<String> deleteAllPosts() {
         postService.deleteAllPosts();
         return ResponseEntity.ok("All data in table: [posts] is deleted!!!");

@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.category.CategoryRequest;
@@ -15,6 +16,9 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/category")
+@SecurityRequirement(
+        name = "Bearer Authentication"
+)
 public class CategoryController {
     private final CategoryService categoryService;
 
