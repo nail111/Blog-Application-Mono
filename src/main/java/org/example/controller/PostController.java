@@ -1,6 +1,9 @@
 package org.example.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.post.PostPageResponse;
@@ -15,6 +18,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/posts")
+@Tag(
+        name = "Post REST API"
+)
 public class PostController {
     private final PostService postService;
 
@@ -23,11 +29,27 @@ public class PostController {
     @SecurityRequirement(
             name = "Bearer Authentication"
     )
+    @Operation(
+            summary = "Create Post REST API",
+            description = "Create Post REST API is used to save post into database"
+    )
+    @ApiResponse(
+            responseCode = "201",
+            description = "HTTP status 201 CREATED"
+    )
     public ResponseEntity<PostResponse> createPost(@RequestBody @Valid PostRequest postRequest) {
         return new ResponseEntity<>(postService.createPost(postRequest), HttpStatus.CREATED);
     }
 
     @GetMapping
+    @Operation(
+            summary = "Get All Post REST API",
+            description = "Get All Post REST API is used to get all posts from database"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status 200 SUCCESS"
+    )
     public ResponseEntity<PostPageResponse> getAllPosts(
             @RequestParam(required = false, defaultValue = "0", name = "pageNo") int pageNo,
             @RequestParam(required = false, defaultValue = "10", name = "pageSize") int pageSize,
@@ -38,6 +60,14 @@ public class PostController {
     }
 
     @GetMapping("/{postId}")
+    @Operation(
+            summary = "Get Post by ID REST API",
+            description = "Get Post by ID REST API is used to get a single post from database"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status 200 SUCCESS"
+    )
     public ResponseEntity<PostResponse> getPostById(@PathVariable("postId") Long id) {
         return ResponseEntity.ok(postService.getPostById(id));
     }
@@ -47,11 +77,27 @@ public class PostController {
     @SecurityRequirement(
             name = "Bearer Authentication"
     )
+    @Operation(
+            summary = "Update Post REST API",
+            description = "Update Post REST API is used to update post in database"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status 200 SUCCESS"
+    )
     public ResponseEntity<PostResponse> updatePostById(@PathVariable("postId") Long id, @RequestBody @Valid PostRequest postRequest) {
         return ResponseEntity.ok(postService.updatePostById(id, postRequest));
     }
 
     @DeleteMapping("/{postId}")
+    @Operation(
+            summary = "Delete Post REST API",
+            description = "Delete Post REST API is used to delete post from database"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status 200 SUCCESS"
+    )
     public ResponseEntity<String> deletePostById(@PathVariable("postId") Long id) {
         return ResponseEntity.ok(postService.deletePostById(id));
     }
@@ -60,6 +106,14 @@ public class PostController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @SecurityRequirement(
             name = "Bearer Authentication"
+    )
+    @Operation(
+            summary = "Delete All Posts REST API",
+            description = "Delete All Posts REST API is used to delete all posts from database"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status 200 SUCCESS"
     )
     public ResponseEntity<String> deleteAllPosts() {
         postService.deleteAllPosts();
