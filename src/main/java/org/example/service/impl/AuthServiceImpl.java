@@ -71,16 +71,35 @@ public class AuthServiceImpl implements AuthService {
 
     private User createUserFromRequest(RegistrationRequest registrationRequest) {
         User user = new User();
+        copyRegistrationRequestToUser(registrationRequest, user);
+        setEncodedPassword(registrationRequest, user);
+        setRoles(user);
+        return user;
+    }
+
+    private void copyRegistrationRequestToUser(RegistrationRequest registrationRequest, User user) {
         user.setName(registrationRequest.getName());
         user.setUsername(registrationRequest.getUsername());
         user.setEmail(registrationRequest.getEmail());
-        user.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
+    }
 
+    private void setEncodedPassword(RegistrationRequest registrationRequest, User user) {
+        String encodedPassword = passwordEncoder.encode(registrationRequest.getPassword());
+        user.setPassword(encodedPassword);
+    }
+
+    private void setRoles(User user) {
         Set<Role> roles = new HashSet<>();
-        Role userRole = roleRepository.findByName("ROLE_USER").orElseThrow(() -> new RuntimeException("Default role not found"));
+        Role userRole = roleRepository.findByName("ROLE_USER")
+                .orElseGet(() -> createAndSaveUserRole("ROLE_USER"));
         roles.add(userRole);
-
         user.setRoles(roles);
-        return user;
+    }
+
+    private Role createAndSaveUserRole(String roleName) {
+        Role role = new Role();
+        role.setName(roleName);
+        roleRepository.save(role);
+        return role;
     }
 }
