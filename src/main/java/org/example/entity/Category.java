@@ -37,7 +37,7 @@ public class Category {
     @Column(name = "updated_at", updatable = true, nullable = false)
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "category")
     @JsonIgnore
     private List<Post> posts;
 }

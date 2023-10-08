@@ -22,10 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -78,7 +75,12 @@ public class PostServiceImpl implements PostService {
                 postResponse.setComments(commentResponseSet);
             }
 
-            postResponse.setCategoryId(post.getCategory().getId());
+            postResponse.setCategoryId(
+                    Optional.ofNullable(post.getCategory())
+                            .map(Category::getId)
+                            .orElse(null)
+            );
+
             postResponseList.add(postResponse);
         });
 
@@ -104,7 +106,12 @@ public class PostServiceImpl implements PostService {
             postResponse.setComments(commentResponseSet);
         }
 
-        postResponse.setCategoryId(post.getCategory().getId());
+        postResponse.setCategoryId(
+                Optional.ofNullable(post.getCategory())
+                        .map(Category::getId)
+                        .orElse(null)
+        );
+
         return postResponse;
     }
 
