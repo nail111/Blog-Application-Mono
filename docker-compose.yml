@@ -1,0 +1,26 @@
+version: '3'
+services:
+  app:
+    container_name: Blog-App
+    image: java:1.0.0
+    restart: always
+    build: .
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    environment:
+      MYSQL_HOST: mysql_db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 12345
+      MYSQL_PORT: 3306
+  db:
+    container_name: mysql_db
+    image: mysql:8.1.0
+    volumes:
+      - C:\Users\Nail\Documents\BlogAppDB:/var/lib/mysql
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_DATABASE: myblog
+      MYSQL_ROOT_PASSWORD: 12345
