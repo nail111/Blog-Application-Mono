@@ -63,7 +63,7 @@
       <recent name="org.example.service" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.BlogApplication">
+  <component name="RunManager" selected="Spring Boot.BlogApplication">
     <configuration name="BlogApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.BlogApplication" />
       <module name="blog-application" />
@@ -92,6 +92,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Spring Boot.BlogApplication" />
         <item itemvalue="Application.BlogApplication" />
       </list>
     </recent_temporary>
@@ -118,6 +119,7 @@
       <workItem from="1695964546808" duration="12592000" />
       <workItem from="1696311840015" duration="11834000" />
       <workItem from="1696490697023" duration="3984000" />
+      <workItem from="1696917077107" duration="750000" />
     </task>
     <task id="LOCAL-00001" summary="add handling ResourceNotFoundException">
       <created>1695018503396</created>
