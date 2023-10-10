@@ -5,8 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ad170a93-ff39-4e4f-abcb-2690e6ee5341" name="Changes" comment="add">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/Category.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/Category.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/Comment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/Comment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/CommonEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/CommonEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/Post.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/Role.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/User.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,7 +123,8 @@
       <workItem from="1695964546808" duration="12592000" />
       <workItem from="1696311840015" duration="11834000" />
       <workItem from="1696490697023" duration="3984000" />
-      <workItem from="1696917077107" duration="750000" />
+      <workItem from="1696917077107" duration="2609000" />
+      <workItem from="1696933943382" duration="1322000" />
     </task>
     <task id="LOCAL-00001" summary="add handling ResourceNotFoundException">
       <created>1695018503396</created>
