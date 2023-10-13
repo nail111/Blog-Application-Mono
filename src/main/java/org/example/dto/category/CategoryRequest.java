@@ -8,10 +8,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
+import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryRequest {
+public class CategoryRequest implements Serializable {
 
     @NotNull(message = "name can not be null")
     @NotBlank(message = "name can not be empty")

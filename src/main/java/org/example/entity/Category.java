@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
@@ -15,7 +16,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Category extends CommonEntity {
+public class Category extends CommonEntity implements Serializable {
 
     @Column(name = "name", unique = true, nullable = false)
     private String name;

@@ -5,12 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ad170a93-ff39-4e4f-abcb-2690e6ee5341" name="Changes" comment="add">
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/Category.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/Category.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/Comment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/Comment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/CommonEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/CommonEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/Post.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/Role.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application-local.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application-local.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,6 +44,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/nailt/Desktop/blog-application/src/main/java/org/example/dto/camunda&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -62,12 +59,16 @@
   }
 }</component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\nailt\Desktop\blog-application\src\main\java\org\example\dto\camunda" />
+      <recent name="C:\Users\nailt\Desktop\blog-application\src\main\resources" />
+    </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="org.example.dto.post" />
       <recent name="org.example.service" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.BlogApplication">
+  <component name="RunManager" selected="Application.BlogApplication">
     <configuration name="BlogApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.BlogApplication" />
       <module name="blog-application" />
@@ -96,7 +97,6 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Spring Boot.BlogApplication" />
         <item itemvalue="Application.BlogApplication" />
       </list>
     </recent_temporary>
@@ -125,6 +125,7 @@
       <workItem from="1696490697023" duration="3984000" />
       <workItem from="1696917077107" duration="2609000" />
       <workItem from="1696933943382" duration="1322000" />
+      <workItem from="1697204997080" duration="12000" />
     </task>
     <task id="LOCAL-00001" summary="add handling ResourceNotFoundException">
       <created>1695018503396</created>

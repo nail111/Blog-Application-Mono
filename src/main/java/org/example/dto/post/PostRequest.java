@@ -10,6 +10,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
+import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,7 +19,7 @@ import org.hibernate.validator.constraints.Length;
 @Schema(
         description = "PostRequest Model Information"
 )
-public class PostRequest {
+public class PostRequest implements Serializable {
 
     @NotNull(message = "title can not be null")
     @NotBlank(message = "title can not be empty")

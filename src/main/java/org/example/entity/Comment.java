@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "comments")
 @Getter
@@ -12,7 +14,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Comment extends CommonEntity {
+public class Comment extends CommonEntity implements Serializable {
 
     @Column(name = "name", unique = false, nullable = false)
     private String name;

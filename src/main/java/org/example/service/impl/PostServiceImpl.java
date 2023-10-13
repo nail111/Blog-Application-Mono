@@ -2,6 +2,10 @@ package org.example.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.runtime.ProcessInstanceWithVariables;
+import org.camunda.bpm.engine.variable.VariableMap;
+import org.example.dto.camunda.ResponseOutput;
 import org.example.dto.comment.CommentResponse;
 import org.example.dto.post.PostPageResponse;
 import org.example.dto.post.PostRequest;
@@ -20,9 +24,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+
+import static org.example.dto.camunda.ResponseOutput.error;
+import static org.example.dto.camunda.ResponseOutput.success;
 
 @Service
 @RequiredArgsConstructor
@@ -32,26 +41,23 @@ public class PostServiceImpl implements PostService {
     private final CommentService commentService;
     private final CommentRepository commentRepository;
     private final CategoryRepository categoryRepository;
+    private final RuntimeService runtimeService;
 
     @Override
-    public PostResponse createPost(PostRequest postRequest) {
-        Post post = new Post();
-        BeanUtils.copyProperties(postRequest, post);
+    public ResponseEntity<ResponseOutput> createPost(PostRequest postRequest) {
+        ProcessInstanceWithVariables processInstanceWithVariables = runtimeService.createProcessInstanceByKey("createPost")
+                .setVariable("postRequest", postRequest)
+                .setVariable("isCreated", false)
+                .executeWithVariablesInReturn();
 
-        Category category = categoryRepository
-                .findById(postRequest.getCategoryId())
-                .orElseThrow(
-                        () -> new ResourceNotFoundException("category", "id", String.valueOf(postRequest.getCategoryId())));
+        VariableMap variables = processInstanceWithVariables.getVariables();
+        String uuid = processInstanceWithVariables.getId();
+        String globalErrorCode = variables.getValue("globalErrorCode", String.class);
 
-        post.setCategory(category);
-
-        postRepository.save(post);
-
-        PostResponse postResponse = new PostResponse();
-        BeanUtils.copyProperties(post, postResponse);
-
-        postResponse.setCategoryId(post.getCategory().getId());
-        return postResponse;
+        if (globalErrorCode != null) {
+            return error(HttpStatus.INTERNAL_SERVER_ERROR, uuid, 400, globalErrorCode, "BPMN Error Extended Information look the Examcad");
+        }
+        return success(uuid, "BPMN WORKED SUCCESSFULLY!");
     }
 
     @Override

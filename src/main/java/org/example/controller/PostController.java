@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.dto.camunda.ResponseOutput;
 import org.example.dto.post.PostPageResponse;
 import org.example.dto.post.PostRequest;
 import org.example.dto.post.PostResponse;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(
         name = "Post REST API"
 )
+@CrossOrigin(origins = "http://localhost:8080")
 public class PostController {
     private final PostService postService;
 
@@ -37,8 +39,9 @@ public class PostController {
             responseCode = "201",
             description = "HTTP status 201 CREATED"
     )
-    public ResponseEntity<PostResponse> createPost(@RequestBody @Valid PostRequest postRequest) {
-        return new ResponseEntity<>(postService.createPost(postRequest), HttpStatus.CREATED);
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<ResponseOutput> createPost(@RequestBody @Valid PostRequest postRequest) {
+        return postService.createPost(postRequest);
     }
 
     @GetMapping
