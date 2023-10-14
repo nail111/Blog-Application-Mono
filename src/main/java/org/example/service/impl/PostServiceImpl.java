@@ -11,7 +11,6 @@ import org.example.dto.post.PostPageResponse;
 import org.example.dto.post.PostRequest;
 import org.example.dto.post.PostResponse;
 import org.example.entity.Category;
-import org.example.entity.Comment;
 import org.example.entity.Post;
 import org.example.exception.ResourceNotFoundException;
 import org.example.repository.CategoryRepository;
@@ -122,40 +121,21 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostResponse updatePostById(Long id, PostRequest postRequest) {
-        Post post = getPost(id);
+    public ResponseEntity<ResponseOutput> updatePostById(Long id, PostRequest postRequest) {
+        ProcessInstanceWithVariables processInstanceWithVariables = runtimeService.createProcessInstanceByKey("updatePost")
+                .setVariable("isUpdated", false)
+                .setVariable("id", id)
+                .setVariable("postRequest", postRequest)
+                .executeWithVariablesInReturn();
 
-        BeanUtils.copyProperties(postRequest, post);
+        VariableMap variables = processInstanceWithVariables.getVariables();
+        String uuid = processInstanceWithVariables.getId();
+        String globalErrorCode = variables.getValue("globalErrorCode", String.class);
 
-        Category category = categoryRepository
-                .findById(postRequest.getCategoryId())
-                .orElseThrow(
-                        () -> new ResourceNotFoundException("category", "id", String.valueOf(postRequest.getCategoryId())));
-
-        post.setCategory(category);
-
-        Post savedPost = postRepository.save(post);
-
-        PostResponse postResponse = new PostResponse();
-        BeanUtils.copyProperties(savedPost, postResponse);
-
-        List<Comment> allCommentsByPostId = commentRepository.findAllCommentsByPostId(post.getId());
-        Set<CommentResponse> commentResponseList = new HashSet<>();
-
-        allCommentsByPostId.forEach(comment -> {
-            CommentResponse commentResponse = new CommentResponse();
-            BeanUtils.copyProperties(comment, commentResponse);
-            commentResponse.setPostId(post.getId());
-            commentResponseList.add(commentResponse);
-        });
-
-        if (!commentResponseList.isEmpty()) {
-            postResponse.setComments(commentResponseList);
+        if (globalErrorCode != null) {
+            return error(HttpStatus.INTERNAL_SERVER_ERROR, uuid, 400, globalErrorCode, "BPMN Error Extended Information look the Examcad");
         }
-
-        postResponse.setCategoryId(category.getId());
-
-        return postResponse;
+        return success(uuid, "BPMN WORKED SUCCESSFULLY!");
     }
 
     @Override

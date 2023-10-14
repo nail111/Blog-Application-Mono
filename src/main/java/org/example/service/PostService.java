@@ -13,7 +13,7 @@ public interface PostService {
 
     PostResponse getPostById(Long id);
 
-    PostResponse updatePostById(Long id, PostRequest postRequest);
+    ResponseEntity<ResponseOutput> updatePostById(Long id, PostRequest postRequest);
 
     String deletePostById(Long id);
 

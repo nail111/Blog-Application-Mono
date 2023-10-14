@@ -88,8 +88,9 @@ public class PostController {
             responseCode = "200",
             description = "HTTP status 200 SUCCESS"
     )
-    public ResponseEntity<PostResponse> updatePostById(@PathVariable("postId") Long id, @RequestBody @Valid PostRequest postRequest) {
-        return ResponseEntity.ok(postService.updatePostById(id, postRequest));
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<ResponseOutput> updatePostById(@PathVariable("postId") Long id, @RequestBody @Valid PostRequest postRequest) {
+        return postService.updatePostById(id, postRequest);
     }
 
     @DeleteMapping("/{postId}")

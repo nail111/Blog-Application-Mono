@@ -1,4 +1,4 @@
-package org.example.delegate;
+package org.example.delegate.post;
 
 import lombok.RequiredArgsConstructor;
 import org.camunda.bpm.engine.delegate.DelegateExecution;

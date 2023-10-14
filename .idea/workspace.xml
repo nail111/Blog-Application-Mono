@@ -6,7 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="ad170a93-ff39-4e4f-abcb-2690e6ee5341" name="Changes" comment="add">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application-local.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application-local.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/PostController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/delegate/CreatePostDelegate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/delegate/post/CreatePostDelegate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/delegate/GetCategoryDelegate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/delegate/post/GetCategoryDelegate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/delegate/SavePostDelegate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/delegate/post/SavePostDelegate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/service/PostService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/service/impl/PostServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/service/impl/PostServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,6 +69,7 @@
       <recent name="C:\Users\nailt\Desktop\blog-application\src\main\resources" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="org.example.delegate.post" />
       <recent name="org.example.dto.post" />
       <recent name="org.example.service" />
     </key>

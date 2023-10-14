@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1tsrvmo" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.16.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.20.0">
+  <bpmn:process id="updatePost" name="UpdatePost" isExecutable="true" camunda:historyTimeToLive="180">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_0ndtjs6</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_0ndtjs6" sourceRef="StartEvent_1" targetRef="Activity_1wg0smi" />
+    <bpmn:serviceTask id="Activity_1wg0smi" name="Get Post" camunda:delegateExpression="${getPostDelegate}">
+      <bpmn:documentation>Get Post from DB</bpmn:documentation>
+      <bpmn:incoming>Flow_0ndtjs6</bpmn:incoming>
+      <bpmn:outgoing>Flow_1kedpbi</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_1wzvhf9" default="Flow_1gtxaht">
+      <bpmn:incoming>Flow_1kedpbi</bpmn:incoming>
+      <bpmn:outgoing>Flow_1gtxaht</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1kvslos</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1kedpbi" sourceRef="Activity_1wg0smi" targetRef="Gateway_1wzvhf9" />
+    <bpmn:sequenceFlow id="Flow_1gtxaht" sourceRef="Gateway_1wzvhf9" targetRef="Activity_0euh5su" />
+    <bpmn:sequenceFlow id="Flow_1kvslos" sourceRef="Gateway_1wzvhf9" targetRef="Event_1nn0fa3">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${post == null}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:endEvent id="Event_1nn0fa3">
+      <bpmn:incoming>Flow_1kvslos</bpmn:incoming>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_0vjbsig" errorRef="Error_0bjrm3p" />
+    </bpmn:endEvent>
+    <bpmn:subProcess id="Activity_0l55o4a" triggeredByEvent="true">
+      <bpmn:endEvent id="Event_0vcqh01">
+        <bpmn:incoming>Flow_129yybu</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:startEvent id="errors">
+        <bpmn:outgoing>Flow_129yybu</bpmn:outgoing>
+        <bpmn:errorEventDefinition id="ErrorEventDefinition_18ledyg" camunda:errorCodeVariable="globalErrorCode" camunda:errorMessageVariable="globalErrorMessage" />
+      </bpmn:startEvent>
+      <bpmn:sequenceFlow id="Flow_129yybu" sourceRef="errors" targetRef="Event_0vcqh01" />
+    </bpmn:subProcess>
+    <bpmn:serviceTask id="Activity_0euh5su" name="Copy properties" camunda:delegateExpression="${copyPostPropertiesDelegate}">
+      <bpmn:incoming>Flow_1gtxaht</bpmn:incoming>
+      <bpmn:outgoing>Flow_0448765</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_0bopd9c" name="Get Category" camunda:delegateExpression="${getCategoryDelegate}">
+      <bpmn:documentation>Get category from DB</bpmn:documentation>
+      <bpmn:incoming>Flow_0448765</bpmn:incoming>
+      <bpmn:outgoing>Flow_0rhkfpu</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_1ihkp5l" default="Flow_0w80jcn">
+      <bpmn:incoming>Flow_0rhkfpu</bpmn:incoming>
+      <bpmn:outgoing>Flow_0w80jcn</bpmn:outgoing>
+      <bpmn:outgoing>Flow_033n8ra</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0w80jcn" sourceRef="Gateway_1ihkp5l" targetRef="Activity_1dny3rl" />
+    <bpmn:sequenceFlow id="Flow_033n8ra" sourceRef="Gateway_1ihkp5l" targetRef="Event_1o8bwia">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${category == null}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:endEvent id="Event_1o8bwia">
+      <bpmn:incoming>Flow_033n8ra</bpmn:incoming>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_0x79349" errorRef="Error_08z0cxv" />
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="Activity_1dny3rl" name="Set Category" camunda:delegateExpression="${setCategoryIntoPostDelegate}">
+      <bpmn:documentation>Set category into post</bpmn:documentation>
+      <bpmn:incoming>Flow_0w80jcn</bpmn:incoming>
+      <bpmn:outgoing>Flow_0unwyj2</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0unwyj2" sourceRef="Activity_1dny3rl" targetRef="Activity_0afq2jb" />
+    <bpmn:serviceTask id="Activity_0afq2jb" name="Save updated post" camunda:delegateExpression="${saveUpdatedPostDelegate}">
+      <bpmn:incoming>Flow_0unwyj2</bpmn:incoming>
+      <bpmn:outgoing>Flow_1b6tpaj</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_1veh2rz">
+      <bpmn:incoming>Flow_1b6tpaj</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1b6tpaj" sourceRef="Activity_0afq2jb" targetRef="Event_1veh2rz" />
+    <bpmn:sequenceFlow id="Flow_0448765" sourceRef="Activity_0euh5su" targetRef="Activity_0bopd9c" />
+    <bpmn:sequenceFlow id="Flow_0rhkfpu" sourceRef="Activity_0bopd9c" targetRef="Gateway_1ihkp5l" />
+  </bpmn:process>
+  <bpmn:error id="Error_0bjrm3p" name="Error_08ublil" errorCode="-110" camunda:errorMessage="Post is not found with id" />
+  <bpmn:error id="Error_08z0cxv" name="Error_0emgb7m" errorCode="-111" camunda:errorMessage="Category is not found with id" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="updatePost">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0dnmi4q_di" bpmnElement="Activity_1wg0smi">
+        <dc:Bounds x="270" y="77" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1wzvhf9_di" bpmnElement="Gateway_1wzvhf9" isMarkerVisible="true">
+        <dc:Bounds x="425" y="92" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_07vv2nh_di" bpmnElement="Event_1nn0fa3">
+        <dc:Bounds x="432" y="212" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ey8p0y_di" bpmnElement="Activity_0euh5su">
+        <dc:Bounds x="540" y="77" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_16tcjxp_di" bpmnElement="Activity_0bopd9c">
+        <dc:Bounds x="710" y="77" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1ihkp5l_di" bpmnElement="Gateway_1ihkp5l" isMarkerVisible="true">
+        <dc:Bounds x="885" y="92" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0ivqcio_di" bpmnElement="Event_1o8bwia">
+        <dc:Bounds x="892" y="212" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_10a9g1y_di" bpmnElement="Activity_1dny3rl">
+        <dc:Bounds x="1010" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ldv7l5_di" bpmnElement="Activity_0afq2jb">
+        <dc:Bounds x="1190" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1veh2rz_di" bpmnElement="Event_1veh2rz">
+        <dc:Bounds x="1372" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_12pfnq4_di" bpmnElement="Activity_0l55o4a" isExpanded="true">
+        <dc:Bounds x="585" y="360" width="350" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0vcqh01_di" bpmnElement="Event_0vcqh01">
+        <dc:Bounds x="787" y="442" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_12a7zgn_di" bpmnElement="errors">
+        <dc:Bounds x="625" y="442" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_129yybu_di" bpmnElement="Flow_129yybu">
+        <di:waypoint x="661" y="460" />
+        <di:waypoint x="787" y="460" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ndtjs6_di" bpmnElement="Flow_0ndtjs6">
+        <di:waypoint x="215" y="117" />
+        <di:waypoint x="270" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1kedpbi_di" bpmnElement="Flow_1kedpbi">
+        <di:waypoint x="370" y="117" />
+        <di:waypoint x="425" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1gtxaht_di" bpmnElement="Flow_1gtxaht">
+        <di:waypoint x="475" y="117" />
+        <di:waypoint x="540" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1kvslos_di" bpmnElement="Flow_1kvslos">
+        <di:waypoint x="450" y="142" />
+        <di:waypoint x="450" y="212" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0w80jcn_di" bpmnElement="Flow_0w80jcn">
+        <di:waypoint x="935" y="117" />
+        <di:waypoint x="1010" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_033n8ra_di" bpmnElement="Flow_033n8ra">
+        <di:waypoint x="910" y="142" />
+        <di:waypoint x="910" y="212" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0unwyj2_di" bpmnElement="Flow_0unwyj2">
+        <di:waypoint x="1110" y="117" />
+        <di:waypoint x="1190" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1b6tpaj_di" bpmnElement="Flow_1b6tpaj">
+        <di:waypoint x="1290" y="117" />
+        <di:waypoint x="1372" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0448765_di" bpmnElement="Flow_0448765">
+        <di:waypoint x="640" y="117" />
+        <di:waypoint x="710" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0rhkfpu_di" bpmnElement="Flow_0rhkfpu">
+        <di:waypoint x="810" y="117" />
+        <di:waypoint x="885" y="117" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
